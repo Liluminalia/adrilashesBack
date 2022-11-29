@@ -18,12 +18,3 @@ listado de tratamientos de cara a cliente final, con seccion de login/logout en 
 ### apartado 2
 
 listado de tratamientos de cara al administrador, donde podra gestionarlos, de manera intuitiva y sencilla, reflejandose los cambios en el listado del apartado 1
-
-# EXTRA
-
-en la parte de cliente, se podra solicitar cita para cada tratamiento, pudiendose ver la disponibilidad en un calendario.
-en la parte de administrador, podra indicar los huecos libres en el calendario.
-
-# EXTRA 2
-
-en caso de, el administrador, no poder atender alguna cita o necesitar comunicarse con el cliente por algun motivo, podra mandar un mensaje al perfil del usuario (cliente)
