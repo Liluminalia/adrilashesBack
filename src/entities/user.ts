@@ -39,7 +39,7 @@ export const userSchema = new Schema<UserI>({
     email: String,
     password: String,
     phone: String,
-    role: 'admin' || 'user',
+    role: String,
     isVip: Boolean,
     appointment: Array<{
         treatmentId: {
