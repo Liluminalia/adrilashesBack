@@ -14,7 +14,7 @@ describe('given dataBaseConnect', () => {
     });
     describe('when we call it', () => {
         test('then it should get connected to the data base', async () => {
-            process.env.NODE_ENV = 'finalProyectData';
+            process.env.NODE_ENV = 'finalProjectData';
             const result = await dataBaseConnect();
             expect(spiConnect).toHaveBeenCalled();
             expect(typeof result).toBe(typeof mongoose);
