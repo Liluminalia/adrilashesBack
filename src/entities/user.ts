@@ -5,7 +5,7 @@ export type ProtoUserI = {
     email?: string;
     password?: string;
     phone?: string;
-    role?: string;
+    role?: 'admin' | 'user';
     isVip?: boolean;
     appointment?: Array<{
         treatmentId?: Types.ObjectId;
@@ -21,7 +21,7 @@ export type UserI = {
     email: string;
     password: string;
     phone: string;
-    role: string;
+    role: 'admin' | 'user';
     isVip: boolean;
     appointment: Array<{
         treatmentId: Types.ObjectId;
@@ -39,7 +39,7 @@ export const userSchema = new Schema<UserI>({
     email: String,
     password: String,
     phone: String,
-    role: String,
+    role: 'admin' || 'user',
     isVip: Boolean,
     appointment: Array<{
         treatmentId: {

@@ -1,5 +1,5 @@
 import { SECRET } from '../config.js';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import bc from 'bcryptjs';
 
 export const getSecret = (secret = SECRET) => {
@@ -20,10 +20,7 @@ export const createToken = (payload: TokenPayload) => {
 
 export const readToken = (token: string) => {
     const payload = jwt.verify(token, getSecret());
-    if (typeof payload === 'string') {
-        throw new Error('token not valid');
-    }
-    return payload;
+    return payload as JwtPayload;
 };
 export const passwordEncrypt = (password: string) => {
     return bc.hash(password, 10);
