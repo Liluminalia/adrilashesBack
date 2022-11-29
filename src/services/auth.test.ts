@@ -48,7 +48,7 @@ describe('given readToken', () => {
 describe('given passwordEncrypt', () => {
     describe('when...', () => {
         test('then...', async () => {
-            const signSpy = await jest.spyOn(bc, 'hash');
+            const signSpy = jest.spyOn(bc, 'hash');
             const r = await passwordEncrypt('froilan');
             expect(typeof r).toBe('string');
             expect(signSpy).toHaveBeenCalled();
@@ -58,7 +58,7 @@ describe('given passwordEncrypt', () => {
 describe('given passwordComparer', () => {
     describe('when...', () => {
         test('then...', async () => {
-            const signSpy = await jest.spyOn(bc, 'compare');
+            const signSpy = jest.spyOn(bc, 'compare');
             const encrypt = await passwordEncrypt('froilan');
             const r = await passwordComparer('froilan', encrypt);
             expect(r).toBe(true);
@@ -70,9 +70,9 @@ describe('given getSecret', () => {
     describe('when...', () => {
         test('then...', () => {
             process.env.SECRET = '';
-            expect(async () => {
-                await getSecret(process.env.SECRET);
-            }).rejects.toThrow();
+            expect(() => {
+                getSecret(process.env.SECRET);
+            }).toThrow();
         });
     });
 });
