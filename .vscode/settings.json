@@ -1,0 +1,23 @@
+{
+    "cSpell.words": ["minimalista", "profes"],
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#97c3ef",
+        "activityBar.background": "#97c3ef",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#e13e8f",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#97c3ef",
+        "statusBar.background": "#6baae8",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#3f91e1",
+        "statusBarItem.remoteBackground": "#6baae8",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeBackground": "#6baae8",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#6baae899",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.color": "6BAAE8"
+}
