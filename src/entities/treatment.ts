@@ -4,7 +4,7 @@ export type ProtoTreatmentI = {
     title?: string;
     img?: string;
     description?: string;
-    price?: string;
+    price?: number;
     time?: string;
 };
 
@@ -13,7 +13,7 @@ export type TreatmentI = {
     title: string;
     img: string;
     description: string;
-    price: string;
+    price: number;
     time: string;
 };
 export const treatmentSchema = new Schema<TreatmentI>({
