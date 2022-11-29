@@ -28,7 +28,7 @@ export class TreatmentRepository implements Repo<TreatmentI> {
     async get(id: id): Promise<TreatmentI> {
         const result = await this.#Model
             .findById(id)
-            .populate<{ _id: Types.ObjectId }>('owner', {
+            .populate<{ _id: Types.ObjectId }>('appointment', {
                 treatments: 0,
             });
         if (!result) {

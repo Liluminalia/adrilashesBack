@@ -19,7 +19,7 @@ describe('Given UserRepository', () => {
     let testIds: Array<string>;
     beforeAll(async () => {
         await dataBaseConnect();
-        await repository.getUserModel().deleteMany();
+        repository.getUserModel().deleteMany();
         await repository.getUserModel().insertMany(mockData);
         const data = await repository.getUserModel().find();
         testIds = [data[0].id, data[1].id];
