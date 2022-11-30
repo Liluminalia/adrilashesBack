@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { setCors } from './middlewares/cors';
-import { errorManager } from './middlewares/errors';
-import { userRouter } from './router/user.router';
-import { treatmentRouter } from './router/treatment.router';
+import { setCors } from './middlewares/cors.js';
+import { errorManager } from './middlewares/errors.js';
+import { userRouter } from './router/user.router.js';
+import { treatmentRouter } from './router/treatment.router.js';
 
 export const app = express();
 app.disable('x-powered-by');
@@ -21,6 +21,6 @@ app.get('/', (req, res) => {
         'API de Adri lashes, esteticista, pon /treatments al final de la URL para ver los tratamientos que realiza'
     ).end();
 });
-app.use('/treatments', treatmentRouter);
 app.use('/users', userRouter);
+app.use('/treatments', treatmentRouter);
 app.use(errorManager);

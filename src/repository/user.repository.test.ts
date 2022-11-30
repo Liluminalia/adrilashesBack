@@ -5,12 +5,12 @@ import { UserRepository } from './user.repository.js';
 describe('Given UserRepository', () => {
     const mockData = [
         {
-            name: 'Pepe',
+            name: 'antonio',
             email: 'pepe@gmail.com',
             password: 'pepe1234',
         },
         {
-            name: 'Ernesto',
+            name: 'sebastian',
             email: 'ernest@gmail.com',
             password: '789ErnesT',
         },
@@ -19,7 +19,7 @@ describe('Given UserRepository', () => {
     let testIds: Array<string>;
     beforeAll(async () => {
         await dataBaseConnect();
-        repository.getUserModel().deleteMany();
+        await repository.getUserModel().deleteMany();
         await repository.getUserModel().insertMany(mockData);
         const data = await repository.getUserModel().find();
         testIds = [data[0].id, data[1].id];

@@ -15,6 +15,13 @@ export type ProtoUserI = {
     }>;
 };
 
+export type Appointment = {
+    treatmentId: Types.ObjectId;
+    date?: Date;
+    isDone?: boolean;
+    discount?: number;
+};
+
 export type UserI = {
     id: string;
     name: string;
@@ -23,12 +30,7 @@ export type UserI = {
     phone: string;
     role: 'admin' | 'user';
     isVip: boolean;
-    appointment: Array<{
-        treatmentId: Types.ObjectId;
-        date?: Date;
-        isDone?: boolean;
-        discount?: number;
-    }>;
+    appointment: Array<Appointment>;
 };
 export const userSchema = new Schema<UserI>({
     name: {
@@ -44,7 +46,7 @@ export const userSchema = new Schema<UserI>({
     appointment: Array<{
         treatmentId: {
             type: Schema.Types.ObjectId;
-            ref: 'Treatments';
+            ref: 'Treatment';
         };
         date?: Date;
         isDone?: boolean;

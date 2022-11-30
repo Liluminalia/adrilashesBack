@@ -7,7 +7,7 @@ import {
 } from '../entities/treatment.js';
 import { id, Repo } from './repo.js';
 
-const debug = debugCreator('W6:repository:treatment');
+const debug = debugCreator('FP:repository:treatment');
 
 export class TreatmentRepository implements Repo<TreatmentI> {
     static instance: TreatmentRepository;
@@ -26,11 +26,7 @@ export class TreatmentRepository implements Repo<TreatmentI> {
         return this.#Model.find();
     }
     async get(id: id): Promise<TreatmentI> {
-        const result = await this.#Model
-            .findById(id)
-            .populate<{ _id: Types.ObjectId }>('appointment', {
-                treatments: 0,
-            });
+        const result = await this.#Model.findById(id);
         if (!result) {
             throw new Error('Not found id');
         }
@@ -59,9 +55,7 @@ export class TreatmentRepository implements Repo<TreatmentI> {
     async find(search: {
         [key: string]: string | number | Date;
     }): Promise<TreatmentI> {
-        const result = await this.#Model
-            .findOne(search)
-            .populate('appointment', { treatments: 0 });
+        const result = await this.#Model.findOne(search);
         if (!result) {
             throw new Error('not found id');
         }

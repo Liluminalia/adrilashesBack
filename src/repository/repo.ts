@@ -1,8 +1,10 @@
 export type id = string;
 export interface BasicRepo<T> {
     get: (id: id) => Promise<T>;
+    getAll: () => Promise<Array<T>>;
     post: (data: Partial<T>) => Promise<T>;
     find: (data: any) => Promise<T>;
+    patch: (id: id, data: Partial<T>) => Promise<T>;
 }
 
 export interface ExtraRepo<T> {
