@@ -1,11 +1,11 @@
 import { UserI, User } from '../entities/user.js';
 import { passwordEncrypt } from '../services/auth.js';
-import { BasicRepo, id } from './repo.js';
+import { BasicRepo, ExtraRepo, id } from './repo.js';
 import debugCreator from 'debug';
 
 const debug = debugCreator('FP:repository:user');
 
-export class UserRepository implements BasicRepo<UserI> {
+export class UserRepository implements BasicRepo<UserI>, ExtraRepo<UserI> {
     static instance: UserRepository;
 
     public static getInstance(): UserRepository {
@@ -15,19 +15,15 @@ export class UserRepository implements BasicRepo<UserI> {
         return UserRepository.instance;
     }
     #Model = User;
-    getAll(): Promise<Array<UserI>> {
-        const result = this.#Model.find().populate('appointment');
-        if (!result) {
-            throw new Error('not found');
-        }
-        return result as unknown as Promise<Array<UserI>>;
+    async getAll(): Promise<Array<UserI>> {
+        return await this.#Model.find().populate('appointment');
     }
-    get(id: id): Promise<UserI> {
-        const result = this.#Model.findById(id).populate('appointment');
-        if (result === (null || undefined)) {
+    async get(id: id): Promise<UserI> {
+        const result = await this.#Model.findById(id).populate('appointment');
+        if (!result) {
             throw new Error('not found id');
         }
-        return result as unknown as Promise<UserI>;
+        return result;
     }
     async post(data: Partial<UserI>): Promise<UserI> {
         if (typeof data.password !== 'string') {
@@ -37,10 +33,10 @@ export class UserRepository implements BasicRepo<UserI> {
         const result = await (
             await this.#Model.create(data)
         ).populate('appointment');
-        return result as unknown as UserI;
+        return result;
     }
-    patch(id: id, data: Partial<UserI>): Promise<UserI> {
-        const result = this.#Model
+    async patch(id: id, data: Partial<UserI>): Promise<UserI> {
+        const result = await this.#Model
             .findByIdAndUpdate(id, data, {
                 new: true,
             })
@@ -48,14 +44,14 @@ export class UserRepository implements BasicRepo<UserI> {
         if (!result) {
             throw new Error('Not found id');
         }
-        return result as unknown as Promise<UserI>;
+        return result;
     }
-    find(search: any): Promise<UserI> {
-        const result = this.#Model.findOne(search).populate('appointment');
-        if (result === (null || undefined)) {
+    async find(search: any): Promise<UserI> {
+        const result = await this.#Model.findOne(search);
+        if (!result) {
             throw new Error('not found id');
         }
-        return result as unknown as Promise<UserI>;
+        return result;
     }
 
     getUserModel() {

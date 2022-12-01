@@ -5,7 +5,7 @@ import {
     TreatmentI,
     Treatment,
 } from '../entities/treatment.js';
-import { id, Repo } from './repo.js';
+import { BasicRepo, id, Repo } from './repo.js';
 
 const debug = debugCreator('FP:repository:treatment');
 
@@ -23,44 +23,36 @@ export class TreatmentRepository implements Repo<TreatmentI> {
         debug('instance');
     }
     async getAll(): Promise<Array<TreatmentI>> {
-        return this.#Model.find();
+        return await this.#Model.find();
     }
-    get(id: id): Promise<TreatmentI> {
-        const result = this.#Model.findById(id);
+    async get(id: id): Promise<TreatmentI> {
+        const result = await this.#Model.findById(id);
         if (!result) {
             throw new Error('Not found id');
         }
-        return result as unknown as Promise<TreatmentI>;
+        return result;
     }
-    patch(id: id, data: Partial<TreatmentI>): Promise<TreatmentI> {
-        const result = this.#Model.findByIdAndUpdate(id, data, {
+    async patch(id: id, data: Partial<TreatmentI>): Promise<TreatmentI> {
+        const result = await this.#Model.findByIdAndUpdate(id, data, {
             new: true,
         });
         if (!result) {
             throw new Error('Not found id');
         }
-        return result as unknown as Promise<TreatmentI>;
+        return result;
     }
-    delete(id: id): Promise<{ id: id }> {
-        const result = this.#Model.findByIdAndDelete(id);
+    async delete(id: id): Promise<{ id: id }> {
+        const result = await this.#Model.findByIdAndDelete(id);
         if (result === null) {
             throw new Error('Not found id');
         }
-        return { id: id } as unknown as Promise<{ id: id }>;
+        return { id: id };
     }
     async post(data: ProtoTreatmentI): Promise<TreatmentI> {
         const result = await this.#Model.create(data);
-        return result as TreatmentI;
+        return result;
     }
-    find(search: {
-        [key: string]: string | number | Date;
-    }): Promise<TreatmentI> {
-        const result = this.#Model.findOne(search);
-        if (!result) {
-            throw new Error('not found id');
-        }
-        return result as unknown as Promise<TreatmentI>;
-    }
+
     disconnect() {
         mongoose.disconnect();
     }

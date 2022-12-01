@@ -27,38 +27,82 @@ describe('Given UserRepository', () => {
     afterAll(async () => {
         mongoose.disconnect();
     });
+    describe('when getAll is called', () => {
+        test('Then  should return an array of users', async () => {
+            const mock2Data = [
+                {
+                    id: testIds[0],
+                    name: 'antonio',
+                    email: 'pepe@gmail.com',
+                    appointment: [],
+                },
+                {
+                    id: testIds[1],
+                    name: 'sebastian',
+                    email: 'ernest@gmail.com',
+                    appointment: [],
+                },
+            ];
+            const result = await repository.getAll();
+            expect(result[0].name).toEqual('antonio');
+        });
+    });
+    describe('when get is called', () => {
+        test('Then  should return an user', async () => {
+            const result = await repository.get(testIds[0]);
+            expect(result.name).toEqual(mockData[0].name);
+        });
 
-    test('Then get should return an user', async () => {
-        const result = await repository.get(testIds[0]);
-        expect(result.name).toEqual(mockData[0].name);
+        test('and receives an invalid id then should return an error', async () => {
+            expect(async () => {
+                await repository.get(testIds[4]);
+            }).rejects.toThrowError();
+        });
     });
 
-    test.skip('when get it receives an invalid id it should return an error', async () => {
-        expect(async () => {
-            await repository.get(testIds[4]);
-        }).rejects.toThrowError();
+    describe('when post is called', () => {
+        test('Then should return the new user', async () => {
+            const newUser = {
+                name: 'tarantino',
+                email: 'killbill@gmail.com',
+                password: 'asd123',
+            };
+            const result = await repository.post(newUser);
+            expect(result.name).toBe('tarantino');
+        });
+        test('and receive an invalid id then should return an error', async () => {
+            expect(async () => {
+                await repository.post({ password: testIds[3] });
+            }).rejects.toThrowError();
+        });
     });
-    test('Then post should return the new user', async () => {
-        const newUser = {
-            name: 'tarantino',
-            email: 'killbill@gmail.com',
-            password: 'asd123',
-        };
-        const result = await repository.post(newUser);
-        expect(result.name).toBe('tarantino');
+    describe('when patch is called', () => {
+        test('Then should return the user updated', async () => {
+            const updatedUser = {
+                email: 'timon@gmail.com',
+                password: 'asd123',
+            };
+            const result = await repository.patch(testIds[0], updatedUser);
+            expect(result.email).toBe('timon@gmail.com');
+        });
+        test('and receive an invalid id then should return an error', async () => {
+            const updatedUser = {
+                email: 'timon@gmail.com',
+            };
+            expect(async () => {
+                await repository.patch('63872f2dd6ffab67d9815644', updatedUser);
+            }).rejects.toThrowError();
+        });
     });
-    test.skip('when post it receives an invalid id it should return an error', async () => {
-        expect(async () => {
-            await repository.post({ password: testIds[3] });
-        }).rejects.toThrowError();
-    });
-    test.skip('when find receives an invalid id it should return an error', async () => {
-        expect(async () => {
-            await repository.find({ password: testIds[3] });
-        }).rejects.toThrow();
-    });
-    test('Then find should return a user', async () => {
-        const result = await repository.find(mockData[0]);
-        expect(result.name).toEqual(mockData[0].name);
+    describe('when find is called ', () => {
+        test('Then should return a user', async () => {
+            const result = await repository.find({ name: 'sebastian' });
+            expect(result.name).toEqual(mockData[1].name);
+        });
+        test('and receive an invalid id then should return an error', async () => {
+            expect(async () => {
+                await repository.find({ key: '' });
+            }).rejects.toThrow();
+        });
     });
 });
