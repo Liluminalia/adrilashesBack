@@ -57,6 +57,16 @@ describe('Given UserController', () => {
 
             expect(res.json).toHaveBeenCalledWith({ token: 'token' });
         });
+
+        test.skip('Then getAll should have been called', async () => {
+            const users = await userController.getAll(
+                req as Request,
+                res as Response,
+                next
+            );
+
+            expect(res.json).toHaveBeenCalledWith({ users });
+        });
     });
     describe('when we dont instantiate it', () => {
         const error: CustomError = new HTTPError(

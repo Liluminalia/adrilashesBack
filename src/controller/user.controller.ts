@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Appointment, UserI } from '../entities/user.js';
 import { HTTPError } from '../interfaces/error.js';
-import { BasicRepo, Repo } from '../repository/repo.js';
+import { FullRepo, Repo } from '../repository/repo.js';
 import { createToken, passwordComparer } from '../services/auth.js';
 import { TreatmentI } from '../entities/treatment.js';
 import createDebug from 'debug';
@@ -9,7 +9,7 @@ const debug = createDebug('FP:controller:users');
 
 export class UserController {
     constructor(
-        public readonly repository: BasicRepo<UserI>,
+        public readonly repository: FullRepo<UserI>,
         public readonly treatmentRepository: Repo<TreatmentI>
     ) {
         //
