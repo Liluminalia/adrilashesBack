@@ -29,20 +29,6 @@ describe('Given UserRepository', () => {
     });
     describe('when getAll is called', () => {
         test('Then  should return an array of users', async () => {
-            const mock2Data = [
-                {
-                    id: testIds[0],
-                    name: 'antonio',
-                    email: 'pepe@gmail.com',
-                    appointment: [],
-                },
-                {
-                    id: testIds[1],
-                    name: 'sebastian',
-                    email: 'ernest@gmail.com',
-                    appointment: [],
-                },
-            ];
             const result = await repository.getAll();
             expect(result[0].name).toEqual('antonio');
         });

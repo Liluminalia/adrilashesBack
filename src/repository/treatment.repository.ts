@@ -5,7 +5,7 @@ import {
     TreatmentI,
     Treatment,
 } from '../entities/treatment.js';
-import { BasicRepo, id, Repo } from './repo.js';
+import { id, Repo } from './repo.js';
 
 const debug = debugCreator('FP:repository:treatment');
 
