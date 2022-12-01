@@ -16,23 +16,19 @@ export class UserRepository implements BasicRepo<UserI> {
         return UserRepository.instance;
     }
     #Model = User;
-    async getAll(): Promise<Array<UserI>> {
-        const result = await this.#Model.find().populate<{
-            treatmentId: Types.ObjectId;
-        }>('appointment');
+    getAll(): Promise<Array<UserI>> {
+        const result = this.#Model.find().populate('appointment');
         if (!result) {
             throw new Error('not found');
         }
-        return result;
+        return result as unknown as Promise<Array<UserI>>;
     }
-    async get(id: id): Promise<UserI> {
-        const result = await this.#Model.findById(id).populate<{
-            treatmentId: Types.ObjectId;
-        }>('appointment');
+    get(id: id): Promise<UserI> {
+        const result = this.#Model.findById(id).populate('appointment');
         if (!result) {
             throw new Error('not found id');
         }
-        return result;
+        return result as unknown as Promise<UserI>;
     }
     async post(data: Partial<UserI>): Promise<UserI> {
         if (typeof data.password !== 'string') {
@@ -46,8 +42,8 @@ export class UserRepository implements BasicRepo<UserI> {
         }>('appointment');
         return result as unknown as UserI;
     }
-    async patch(id: id, data: Partial<UserI>): Promise<UserI> {
-        const result = await this.#Model
+    patch(id: id, data: Partial<UserI>): Promise<UserI> {
+        const result = this.#Model
             .findByIdAndUpdate(id, data, {
                 new: true,
             })
@@ -55,16 +51,14 @@ export class UserRepository implements BasicRepo<UserI> {
         if (!result) {
             throw new Error('Not found id');
         }
-        return result as UserI;
+        return result as unknown as Promise<UserI>;
     }
-    async find(search: any): Promise<UserI> {
-        const result = await this.#Model.findOne(search).populate<{
-            treatmentId: Types.ObjectId;
-        }>('appointment');
+    find(search: any): Promise<UserI> {
+        const result = this.#Model.findOne(search).populate('appointment');
         if (!result) {
             throw new Error('not found id');
         }
-        return result;
+        return result as unknown as Promise<UserI>;
     }
 
     getUserModel() {

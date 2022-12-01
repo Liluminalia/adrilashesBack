@@ -43,15 +43,7 @@ export const userSchema = new Schema<UserI>({
     phone: String,
     role: String,
     isVip: Boolean,
-    appointment: Array<{
-        treatmentId: {
-            type: Schema.Types.ObjectId;
-            ref: 'Treatment';
-        };
-        date?: Date;
-        isDone?: boolean;
-        discount?: number;
-    }>,
+    appointment: Array<Appointment>,
 });
 userSchema.set('toJSON', {
     transform: (_document, returnedObject) => {

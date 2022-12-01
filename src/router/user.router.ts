@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { UserController } from '../controller/user.controller.js';
-import { Authentication, logged } from '../middlewares/interceptor.js';
 import { TreatmentRepository } from '../repository/treatment.repository.js';
 import { UserRepository } from '../repository/user.repository.js';
 

@@ -1,4 +1,5 @@
 import { dataBaseConnect } from '../data.base.connect.js';
+import { ProtoTreatmentI, TreatmentI } from '../entities/treatment.js';
 import { TreatmentRepository } from './treatment.repository.js';
 const mockData = [
     {
@@ -20,13 +21,17 @@ describe('Given TreatmentRepository', () => {
     describe('When we instantiate it', () => {
         const repository = TreatmentRepository.getInstance();
         let testIds: Array<string>;
-        beforeAll(async () => {
-            await dataBaseConnect();
-            await repository.getModel().deleteMany();
-            await repository.getModel().insertMany(mockData);
-            const data = await repository.getModel().find();
+        beforeAll(() => {
+            repository.getModel().deleteMany();
+
+            const data: Array<TreatmentI> = repository.getModel().find();
             testIds = [data[0].id, data[1].id];
         });
+        beforeAll(async () => {
+            await dataBaseConnect();
+            repository.getModel().insertMany(mockData);
+        });
+
         test('Then getAll should have been called', async () => {
             const result = await repository.getAll();
             expect(result[0].title).toEqual(mockData[0].title);
