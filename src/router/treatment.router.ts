@@ -7,7 +7,7 @@ import { UserRepository } from '../repository/user.repository.js';
 export const treatmentRouter = Router();
 const controller = new TreatmentController(
     TreatmentRepository.getInstance(),
-    new UserRepository()
+    UserRepository.getInstance()
 );
 treatmentRouter.get('/', controller.getAll.bind(controller));
 treatmentRouter.get('/:id', controller.get.bind(controller));

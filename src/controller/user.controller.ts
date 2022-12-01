@@ -5,6 +5,7 @@ import { FullRepo, Repo } from '../repository/repo.js';
 import { createToken, passwordComparer } from '../services/auth.js';
 import { TreatmentI } from '../entities/treatment.js';
 import createDebug from 'debug';
+import { ExtraRequest } from '../middlewares/interceptor.js';
 const debug = createDebug('FP:controller:users');
 
 export class UserController {
@@ -12,7 +13,7 @@ export class UserController {
         public readonly repository: FullRepo<UserI>,
         public readonly treatmentRepository: Repo<TreatmentI>
     ) {
-        //
+        debug('instance');
     }
     async register(req: Request, res: Response, next: NextFunction) {
         try {
@@ -61,13 +62,20 @@ export class UserController {
             next(httpError);
         }
     }
-    async addUserTreatment(req: Request, res: Response, next: NextFunction) {
+    async addUserTreatment(
+        req: ExtraRequest,
+        res: Response,
+        next: NextFunction
+    ) {
         try {
-            const user = await this.repository.patch(req.body.id, req.body);
+            if (!req.payload) {
+                throw new Error('Invalid payload');
+            }
+            const user = await this.repository.find(req.payload.id);
+
             const treatment = await this.treatmentRepository.get(
                 req.params.treatmentId
             );
-
             user.appointment.push(treatment as unknown as Appointment);
             this.repository.patch(user.id, { appointment: user.appointment });
             res.json({ user });

@@ -13,7 +13,7 @@ export class TreatmentController {
         public repository: Repo<TreatmentI>,
         public userRepository: BasicRepo<UserI>
     ) {
-        //
+        debug('instance');
     }
     async getAll(req: Request, resp: Response, next: NextFunction) {
         try {

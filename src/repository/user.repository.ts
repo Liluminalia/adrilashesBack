@@ -7,7 +7,9 @@ const debug = debugCreator('FP:repository:user');
 
 export class UserRepository implements BasicRepo<UserI>, ExtraRepo<UserI> {
     static instance: UserRepository;
-
+    private constructor() {
+        debug('instance');
+    }
     public static getInstance(): UserRepository {
         if (!UserRepository.instance) {
             UserRepository.instance = new UserRepository();
