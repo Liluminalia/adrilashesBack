@@ -25,7 +25,7 @@ export class UserRepository implements BasicRepo<UserI> {
     }
     get(id: id): Promise<UserI> {
         const result = this.#Model.findById(id).populate('appointment');
-        if (!result) {
+        if (result === (null || undefined)) {
             throw new Error('not found id');
         }
         return result as unknown as Promise<UserI>;
@@ -37,9 +37,7 @@ export class UserRepository implements BasicRepo<UserI> {
         data.password = await passwordEncrypt(data.password);
         const result = await (
             await this.#Model.create(data)
-        ).populate<{
-            treatmentId: Types.ObjectId;
-        }>('appointment');
+        ).populate('appointment');
         return result as unknown as UserI;
     }
     patch(id: id, data: Partial<UserI>): Promise<UserI> {
@@ -55,7 +53,7 @@ export class UserRepository implements BasicRepo<UserI> {
     }
     find(search: any): Promise<UserI> {
         const result = this.#Model.findOne(search).populate('appointment');
-        if (!result) {
+        if (result === (null || undefined)) {
             throw new Error('not found id');
         }
         return result as unknown as Promise<UserI>;
