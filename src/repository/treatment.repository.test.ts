@@ -1,5 +1,3 @@
-import { dataBaseConnect } from '../data.base.connect.js';
-import { ProtoTreatmentI, TreatmentI } from '../entities/treatment.js';
 import { TreatmentRepository } from './treatment.repository.js';
 const mockData = [
     {

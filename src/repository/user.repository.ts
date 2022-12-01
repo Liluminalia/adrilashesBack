@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import { UserI, User } from '../entities/user.js';
 import { passwordEncrypt } from '../services/auth.js';
 import { BasicRepo, id } from './repo.js';
