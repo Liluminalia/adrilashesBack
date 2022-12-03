@@ -65,9 +65,6 @@ export class UserController {
     async getOne(req: Request, res: Response, next: NextFunction) {
         try {
             const users = await this.repository.get(req.params.id);
-            if (!users) {
-                throw new Error('Not fount id');
-            }
             res.json({ users });
         } catch (error) {
             const httpError = new HTTPError(
@@ -162,22 +159,7 @@ export class UserController {
             next(httpError);
         }
     }
-    async removeUser(req: Request, res: Response, next: NextFunction) {
-        try {
-            const users = await this.repository.get(req.params.id);
-            if (!users) {
-                throw new Error('Not fount id');
-            }
-            res.json({ users });
-        } catch (error) {
-            const httpError = new HTTPError(
-                503,
-                'Service unavailable',
-                (error as Error).message
-            );
-            next(httpError);
-        }
-    }
+
     #createHttpError(error: Error) {
         if (error.message === 'Not found id') {
             const httpError = new HTTPError(404, 'Not Found id', error.message);

@@ -18,10 +18,12 @@ export class UserRepository implements BasicRepo<UserI>, ExtraRepo<UserI> {
     }
     #Model = User;
     async getAll(): Promise<Array<UserI>> {
-        return await this.#Model.find().populate('appointments');
+        return await this.#Model.find().populate('appointments._id');
     }
     async get(id: id): Promise<UserI> {
-        const result = await this.#Model.findById(id).populate('appointments');
+        const result = await this.#Model
+            .findById(id)
+            .populate('appointments._id');
         if (!result) {
             throw new Error('not found id');
         }
@@ -34,7 +36,7 @@ export class UserRepository implements BasicRepo<UserI>, ExtraRepo<UserI> {
         data.password = await passwordEncrypt(data.password);
         const result = await (
             await this.#Model.create(data)
-        ).populate('appointments');
+        ).populate('appointments._id');
         return result;
     }
     async patch(id: id, data: Partial<UserI>): Promise<UserI> {

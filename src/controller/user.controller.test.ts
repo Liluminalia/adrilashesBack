@@ -78,7 +78,6 @@ describe('Given UserController', () => {
                 },
             });
         });
-
         test('Then login should have been called', async () => {
             (passwordComparer as jest.Mock).mockResolvedValue(true);
             (createToken as jest.Mock).mockReturnValue('token');
@@ -88,9 +87,13 @@ describe('Given UserController', () => {
 
             expect(res.json).toHaveBeenCalledWith({ token: 'token' });
         });
-
         test('Then getAll should have been called', async () => {
             await userController.getAll(req as Request, res as Response, next);
+
+            expect(res.json).toHaveBeenCalled();
+        });
+        test('Then getOne should have been called', async () => {
+            await userController.getOne(req as Request, res as Response, next);
 
             expect(res.json).toHaveBeenCalled();
         });
@@ -249,6 +252,11 @@ describe('Given UserController', () => {
         test('Then getAll should throw an error', async () => {
             repository.getAll = jest.fn().mockRejectedValue(HTTPError);
             await userController.getAll(req as Request, res as Response, next);
+            expect(error).toBeInstanceOf(HTTPError);
+        });
+        test('Then getOne should throw an error', async () => {
+            repository.get = jest.fn().mockRejectedValue(HTTPError);
+            await userController.getOne(req as Request, res as Response, next);
             expect(error).toBeInstanceOf(HTTPError);
         });
         test('Then addUserTreatment should throw an error', async () => {

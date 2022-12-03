@@ -11,7 +11,6 @@ const controller = new UserController(
 );
 userRouter.post('/register', controller.register.bind(controller));
 userRouter.post('/login', controller.login.bind(controller));
-userRouter.get('/', controller.getAll.bind(controller));
 userRouter.patch(
     '/appointments/add/:treatmentId',
     logged,
@@ -19,9 +18,30 @@ userRouter.patch(
     controller.addUserTreatment.bind(controller)
 );
 userRouter.patch(
+    '/appointments/delete/:treatmentId/:userId',
+    logged,
+    Authentication,
+    Admin,
+    controller.deleteUserAppointment.bind(controller)
+);
+userRouter.patch(
     '/appointments/discount/:treatmentId/:userId/:discount',
     logged,
     Authentication,
     Admin,
     controller.discountUserAppointment.bind(controller)
+);
+userRouter.get(
+    '/',
+    logged,
+    Authentication,
+    Admin,
+    controller.getAll.bind(controller)
+);
+userRouter.get(
+    '/:userId',
+    logged,
+    Authentication,
+    Admin,
+    controller.getOne.bind(controller)
 );
