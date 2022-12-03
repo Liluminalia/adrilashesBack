@@ -30,7 +30,9 @@ export class TreatmentController {
     }
     async get(req: Request, resp: Response, next: NextFunction) {
         try {
+            console.log(this.repository);
             const treatment = await this.repository.get(req.params.id);
+            console.log(treatment);
             resp.json({ treatment });
         } catch (error) {
             next(this.#createHttpError(error as Error));

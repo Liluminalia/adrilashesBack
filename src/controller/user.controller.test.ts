@@ -12,6 +12,8 @@ describe('Given UserController', () => {
     describe('When we instantiate it correctly', () => {
         const repository = UserRepository.getInstance();
         const treatmentRepo = TreatmentRepository.getInstance();
+        const userController = new UserController(repository, treatmentRepo);
+
         const userId = new Types.ObjectId();
         const treatmentId = new Types.ObjectId();
         const discount = 50;
@@ -47,7 +49,6 @@ describe('Given UserController', () => {
                 role: 'admin',
             },
         ]);
-        const userController = new UserController(repository, treatmentRepo);
         let req: Partial<ExtraRequest>;
         let res: Partial<Response>;
         let next: NextFunction;
