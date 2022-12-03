@@ -13,6 +13,8 @@ describe('Given UserController', () => {
         const treatmentRepo = TreatmentRepository.getInstance();
         const userId = new Types.ObjectId();
         const treatmentId = new Types.ObjectId();
+        const discount = 50;
+
         repository.post = jest.fn().mockResolvedValue({
             id: userId,
             name: 'pepe',
@@ -22,7 +24,7 @@ describe('Given UserController', () => {
             id: userId,
             name: 'pepe',
             role: 'admin',
-            appointment: [treatmentId],
+            appointments: [treatmentId],
         });
         repository.getAll = jest.fn().mockResolvedValue([
             {
@@ -48,19 +50,22 @@ describe('Given UserController', () => {
             },
         ]);
         const userController = new UserController(repository, treatmentRepo);
-
         let req: Partial<ExtraRequest>;
         let res: Partial<Response>;
         let next: NextFunction;
         beforeEach(() => {
             req = {};
-            res = {};
+            req.params = {
+                treatmentId: treatmentId.toString(),
+            };
             req.payload = { id: userId };
-            req.params = { treatmentId: treatmentId.toString() };
+
+            res = {};
             res.status = jest.fn().mockReturnValue(res);
             next = jest.fn();
             res.json = jest.fn();
         });
+
         test('Then register should have been called', async () => {
             await userController.register(
                 req as Request,
@@ -93,6 +98,19 @@ describe('Given UserController', () => {
         });
         test('Then addUserTreatment should have been called', async () => {
             await userController.addUserTreatment(
+                req as ExtraRequest,
+                res as Response,
+                next
+            );
+
+            expect(res.json).toHaveBeenCalled();
+        });
+        test('Then discountUserAppointment should have been called', async () => {
+            req.params = {
+                treatmentId: treatmentId.toString(),
+                discount: discount.toString(),
+            };
+            await userController.discountUserAppointment(
                 req as ExtraRequest,
                 res as Response,
                 next

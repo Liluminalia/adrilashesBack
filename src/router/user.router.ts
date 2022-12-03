@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { UserController } from '../controller/user.controller.js';
-import { logged } from '../middlewares/interceptor.js';
+import { Admin, Authentication, logged } from '../middlewares/interceptor.js';
 import { TreatmentRepository } from '../repository/treatment.repository.js';
 import { UserRepository } from '../repository/user.repository.js';
 
@@ -15,5 +15,13 @@ userRouter.get('/', controller.getAll.bind(controller));
 userRouter.patch(
     '/appointments/add/:treatmentId',
     logged,
+    Authentication,
     controller.addUserTreatment.bind(controller)
+);
+userRouter.patch(
+    '/appointments/discount/:treatmentId/:userId/:discount',
+    logged,
+    Authentication,
+    Admin,
+    controller.discountUserAppointment.bind(controller)
 );

@@ -7,18 +7,17 @@ export type ProtoUserI = {
     phone?: string;
     role?: 'admin' | 'user';
     isVip?: boolean;
-    appointment?: Array<{
+    appointments?: Array<{
         treatmentId?: Types.ObjectId;
         date?: Date;
-        isDone?: boolean;
         discount?: number;
     }>;
 };
 
 export type Appointment = {
+    _id: Types.ObjectId;
     treatmentId: Types.ObjectId;
     date?: Date;
-    isDone?: boolean;
     discount?: number;
 };
 
@@ -30,7 +29,7 @@ export type UserI = {
     phone: string;
     role: 'admin' | 'user';
     isVip: boolean;
-    appointment: Array<Appointment>;
+    appointments: Array<Appointment>;
 };
 export const userSchema = new Schema<UserI>({
     name: {
@@ -43,7 +42,20 @@ export const userSchema = new Schema<UserI>({
     phone: String,
     role: String,
     isVip: Boolean,
-    appointment: Array<Appointment>,
+    appointments: [
+        {
+            _id: {
+                type: Schema.Types.ObjectId,
+                ref: 'Treatment',
+            },
+            treatmentId: {
+                type: Schema.Types.ObjectId,
+                ref: 'Treatment',
+            },
+            date: Date,
+            discount: Number,
+        },
+    ],
 });
 userSchema.set('toJSON', {
     transform: (_document, returnedObject) => {

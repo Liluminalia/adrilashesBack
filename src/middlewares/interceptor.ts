@@ -3,6 +3,7 @@ import { HTTPError } from '../interfaces/error.js';
 import { readToken } from '../services/auth.js';
 import { JwtPayload } from 'jsonwebtoken';
 import { TreatmentRepository } from '../repository/treatment.repository.js';
+import { UserRepository } from '../repository/user.repository.js';
 export interface ExtraRequest extends Request {
     payload?: JwtPayload;
 }
@@ -35,12 +36,11 @@ export const Authentication = async (
     res: Response,
     next: NextFunction
 ) => {
-    const treatmentRepo = TreatmentRepository.getInstance();
+    const userRepo = UserRepository.getInstance();
 
     try {
-        const treatment = await treatmentRepo.get(req.params.id);
-
-        if (req.payload && treatment.id.toString() !== req.payload.id) {
+        const user = await userRepo.get((req.payload as JwtPayload).id);
+        if (req.payload && user.id.toString() !== req.payload.id) {
             next(
                 new HTTPError(
                     403,
@@ -48,6 +48,34 @@ export const Authentication = async (
                     'usuario o contraseña incorrectos'
                 )
             );
+        }
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+export const Admin = async (
+    req: ExtraRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    const userRepo = UserRepository.getInstance();
+
+    try {
+        if (!req.payload) {
+            throw new Error('invalid payload');
+        }
+        const user = await userRepo.get(req.payload.id);
+
+        if (user.role !== 'admin') {
+            next(
+                new HTTPError(
+                    403,
+                    'Forbidden',
+                    'usuario o contraseña incorrectos'
+                )
+            );
+            return;
         }
         next();
     } catch (error) {

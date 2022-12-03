@@ -71,13 +71,77 @@ export class UserController {
             if (!req.payload) {
                 throw new Error('Invalid payload');
             }
-            const user = await this.repository.find(req.payload.id);
-
+            const user = await this.repository.find({ _id: req.payload.id });
             const treatment = await this.treatmentRepository.get(
                 req.params.treatmentId
             );
-            user.appointment.push(treatment as unknown as Appointment);
-            this.repository.patch(user.id, { appointment: user.appointment });
+            user.appointments.push(treatment as unknown as Appointment);
+            this.repository.patch(user.id, { appointments: user.appointments });
+            res.json({ user });
+        } catch (error) {
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+        }
+    }
+    async discountUserAppointment(
+        req: ExtraRequest,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            if (!req.payload) {
+                throw new Error('Invalid payload');
+            }
+            const user = await this.repository.find({
+                _id: req.params.userId,
+            });
+            console.log(user);
+            const appointment = await user.appointments.find(
+                (appointment) =>
+                    appointment._id._id.toString() === req.params.treatmentId
+            );
+            console.log(appointment);
+            if (!appointment) {
+                throw new Error('Not found id');
+            }
+
+            this.repository.patch(user.id, { appointments: user.appointments });
+            res.json({ user });
+        } catch (error) {
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+        }
+    }
+    async deleteUserAppointment(
+        req: ExtraRequest,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            if (!req.payload) {
+                throw new Error('Invalid payload');
+            }
+            const user = await this.repository.find(req.payload.id);
+            const appointment = await user.appointments.find(
+                (treatment) =>
+                    treatment.treatmentId.toString() === req.params.id
+            );
+            if (!appointment) {
+                throw new Error('Not found id');
+            }
+            user.appointments.filter(
+                (treatment) =>
+                    treatment.treatmentId.toString() !== req.params.id
+            );
+            this.repository.patch(user.id, { appointments: user.appointments });
             res.json({ user });
         } catch (error) {
             const httpError = new HTTPError(
