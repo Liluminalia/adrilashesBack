@@ -36,6 +36,7 @@ export class TreatmentRepository implements Repo<TreatmentI> {
         const result = await this.#Model.findByIdAndUpdate(id, data, {
             new: true,
         });
+
         if (!result) {
             throw new Error('Not found id');
         }

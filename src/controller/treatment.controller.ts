@@ -59,6 +59,7 @@ export class TreatmentController {
                 req.params.id,
                 req.body
             );
+
             resp.status(202).json({ treatments });
         } catch (error) {
             next(this.#createHttpError(error as Error));
