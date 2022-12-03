@@ -62,6 +62,22 @@ export class UserController {
             next(httpError);
         }
     }
+    async getOne(req: Request, res: Response, next: NextFunction) {
+        try {
+            const users = await this.repository.get(req.params.id);
+            if (!users) {
+                throw new Error('Not fount id');
+            }
+            res.json({ users });
+        } catch (error) {
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+        }
+    }
     async addUserTreatment(
         req: ExtraRequest,
         res: Response,
@@ -99,16 +115,15 @@ export class UserController {
             const user = await this.repository.find({
                 _id: req.params.userId,
             });
-            console.log(user);
+
             const appointment = await user.appointments.find(
                 (appointment) =>
                     appointment._id._id.toString() === req.params.treatmentId
             );
-            console.log(appointment);
             if (!appointment) {
                 throw new Error('Not found id');
             }
-
+            appointment.discount = +req.params.discount;
             this.repository.patch(user.id, { appointments: user.appointments });
             res.json({ user });
         } catch (error) {
@@ -126,23 +141,34 @@ export class UserController {
         next: NextFunction
     ) {
         try {
-            if (!req.payload) {
-                throw new Error('Invalid payload');
-            }
-            const user = await this.repository.find(req.payload.id);
-            const appointment = await user.appointments.find(
+            const user = await this.repository.find({
+                _id: req.params.userId,
+            });
+            user.appointments = await user.appointments.filter(
                 (treatment) =>
-                    treatment.treatmentId.toString() === req.params.id
+                    treatment._id._id.toString() !== req.params.treatmentId
             );
-            if (!appointment) {
-                throw new Error('Not found id');
-            }
-            user.appointments.filter(
-                (treatment) =>
-                    treatment.treatmentId.toString() !== req.params.id
-            );
-            this.repository.patch(user.id, { appointments: user.appointments });
+            await this.repository.patch(user.id, {
+                appointments: user.appointments,
+            });
+
             res.json({ user });
+        } catch (error) {
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+        }
+    }
+    async removeUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const users = await this.repository.get(req.params.id);
+            if (!users) {
+                throw new Error('Not fount id');
+            }
+            res.json({ users });
         } catch (error) {
             const httpError = new HTTPError(
                 503,
@@ -154,7 +180,7 @@ export class UserController {
     }
     #createHttpError(error: Error) {
         if (error.message === 'Not found id') {
-            const httpError = new HTTPError(404, 'Not Found', error.message);
+            const httpError = new HTTPError(404, 'Not Found id', error.message);
             return httpError;
         }
         const httpError = new HTTPError(

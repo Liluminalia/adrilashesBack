@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Types } from 'mongoose';
+import { dataBaseConnect } from '../data.base.connect.js';
 import { CustomError, HTTPError } from '../interfaces/error.js';
 import { ExtraRequest } from '../middlewares/interceptor.js';
 import { TreatmentRepository } from '../repository/treatment.repository.js';
@@ -17,12 +18,12 @@ describe('Given UserController', () => {
 
         repository.post = jest.fn().mockResolvedValue({
             id: userId,
-            name: 'pepe',
+            name: 'Antonio',
             role: 'admin',
         });
         repository.find = jest.fn().mockResolvedValue({
             id: userId,
-            name: 'pepe',
+            name: 'Ignacio',
             role: 'admin',
             appointments: [treatmentId],
         });
@@ -35,17 +36,14 @@ describe('Given UserController', () => {
         ]);
         repository.get = jest.fn().mockResolvedValue({
             id: userId,
-            name: 'antonio',
+            name: 'Uri',
             role: 'admin',
         });
-        treatmentRepo.get = jest.fn().mockResolvedValue({
-            id: '6388eeb8b065a23947e964ff',
-            name: 'federico',
-        });
+
         repository.patch = jest.fn().mockResolvedValue([
             {
                 id: userId,
-                name: 'pepe',
+                name: 'panela',
                 role: 'admin',
             },
         ]);
@@ -75,7 +73,7 @@ describe('Given UserController', () => {
             expect(res.json).toHaveBeenCalledWith({
                 user: {
                     id: userId,
-                    name: 'pepe',
+                    name: 'Antonio',
                     role: 'admin',
                 },
             });
@@ -97,6 +95,10 @@ describe('Given UserController', () => {
             expect(res.json).toHaveBeenCalled();
         });
         test('Then addUserTreatment should have been called', async () => {
+            treatmentRepo.get = jest.fn().mockResolvedValue({
+                id: '6388eeb8b065a23947e964ff',
+                name: 'uñas',
+            });
             await userController.addUserTreatment(
                 req as ExtraRequest,
                 res as Response,
@@ -105,10 +107,36 @@ describe('Given UserController', () => {
 
             expect(res.json).toHaveBeenCalled();
         });
-        test('Then discountUserAppointment should have been called', async () => {
+        test('Then deleteUserAppointment should have been called', async () => {
+            repository.find = jest.fn().mockResolvedValue({
+                _id: '6388eeb8b1233a23947e964ii',
+                name: 'tioPhill',
+                role: 'user',
+                appointments: [{ _id: { _id: '6388eeb8b065a23947e964ff' } }],
+            });
             req.params = {
-                treatmentId: treatmentId.toString(),
-                discount: discount.toString(),
+                userId: '6388eeb8b1233a23947e964ii',
+                treatmentId: '6388eeb8b065a23947e964ff',
+            };
+            await userController.deleteUserAppointment(
+                req as ExtraRequest,
+                res as Response,
+                next
+            );
+
+            expect(res.json).toHaveBeenCalled();
+        });
+        test('Then discountUserAppointment should have been called', async () => {
+            repository.find = jest.fn().mockResolvedValue({
+                _id: '638b88666b322e85bf317pi5',
+                name: 'papaya',
+                role: 'user',
+                appointments: [{ _id: { _id: '638b88008b322e85bf317fe3' } }],
+            });
+            req.params = {
+                treatmentId: '638b88008b322e85bf317fe3',
+                userId: '638b88666b322e85bf317pi5',
+                discount: '50',
             };
             await userController.discountUserAppointment(
                 req as ExtraRequest,
@@ -117,6 +145,26 @@ describe('Given UserController', () => {
             );
 
             expect(res.json).toHaveBeenCalled();
+        });
+        test('Then discountUserAppointment if there is no appointment it should throw an error', async () => {
+            repository.find = jest.fn().mockResolvedValue({
+                _id: '638b88666b322e85bf317pi5',
+                name: 'papaya',
+                role: 'user',
+                appointments: [{ _id: { _id: '638be3' } }],
+            });
+            req.params = {
+                treatmentId: '638b88008b322e85bf317fe3',
+                userId: '638b88666b322e85bf317pi5',
+                discount: '50',
+            };
+            const error = new Error('Not found id');
+            await userController.discountUserAppointment(
+                req as ExtraRequest,
+                res as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
         });
     });
     describe('when we instantiate it not properly', () => {
@@ -129,7 +177,9 @@ describe('Given UserController', () => {
         const repository = UserRepository.getInstance();
         const treatmentRepo = TreatmentRepository.getInstance();
         const userController = new UserController(repository, treatmentRepo);
-
+        const userId = new Types.ObjectId();
+        const treatmentId = new Types.ObjectId();
+        const discount = 50;
         const req: Partial<Request> = {};
         const res: Partial<Response> = {
             json: jest.fn(),
@@ -208,6 +258,26 @@ describe('Given UserController', () => {
                 res as Response,
                 next
             );
+            expect(error).toBeInstanceOf(HTTPError);
+        });
+        test('Then discountUserAppointment should throw an error', async () => {
+            repository.find = jest.fn().mockRejectedValue(HTTPError);
+            await userController.discountUserAppointment(
+                req as ExtraRequest,
+                res as Response,
+                next
+            );
+
+            expect(error).toBeInstanceOf(HTTPError);
+        });
+        test('Then deleteUserAppointment should throw an error', async () => {
+            repository.find = jest.fn().mockRejectedValue(HTTPError);
+            await userController.deleteUserAppointment(
+                req as ExtraRequest,
+                res as Response,
+                next
+            );
+
             expect(error).toBeInstanceOf(HTTPError);
         });
     });
