@@ -7,12 +7,12 @@ const debug = debugCreator('W6:middleware:errors');
 export const errorManager = (
     error: CustomError,
     _req: Request,
-    resp: Response,
+    res: Response,
     _next: NextFunction
 ) => {
     debug(error.name, error.statusCode, error.statusMessage, error.message);
     let status = error.statusCode || 500;
-    if (error.name === 'ValidationError') {
+    if (error.name === 'Validation Error') {
         status = 406;
     }
     const result = {
@@ -20,5 +20,7 @@ export const errorManager = (
         type: error.name,
         error: error.message,
     };
-    resp.status(status).json(result).end();
+    res.status(status);
+    res.json(result);
+    res.end();
 };
