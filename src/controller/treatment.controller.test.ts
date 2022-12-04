@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { TreatmentRepository } from '../repository/treatment.repository.js';
 import { UserRepository } from '../repository/user.repository.js';
-import { ProtoTreatmentI, TreatmentI } from '../entities/treatment.js';
+import { TreatmentI } from '../entities/treatment.js';
 import { CustomError, HTTPError } from '../interfaces/error.js';
 import { TreatmentController } from './treatment.controller.js';
 import { Types } from 'mongoose';
@@ -16,7 +16,6 @@ describe('Given TreatmentController', () => {
             userRepository
         );
 
-        const userId = new Types.ObjectId();
         const mockData: Array<TreatmentI> = [
             {
                 id: '638bb6c1aacbf2a5689ee24d',
@@ -35,14 +34,6 @@ describe('Given TreatmentController', () => {
                 time: 30,
             },
         ];
-        const mockTreatment: TreatmentI = {
-            id: '638bb6c1aacbf2a5689e1348',
-            title: 'pier',
-            img: 'sfg',
-            description: '4sdss',
-            price: 6,
-            time: 68,
-        };
 
         const req: Partial<Request> = {};
         const res: Partial<Response> = {

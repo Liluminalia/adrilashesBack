@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import { HTTPError } from '../interfaces/error.js';
 import { readToken } from '../services/auth.js';
 import { JwtPayload } from 'jsonwebtoken';
-import { TreatmentRepository } from '../repository/treatment.repository.js';
 import { UserRepository } from '../repository/user.repository.js';
 export interface ExtraRequest extends Request {
     payload?: JwtPayload;

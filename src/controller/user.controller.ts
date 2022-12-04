@@ -143,7 +143,7 @@ export class UserController {
             const user = await this.repository.find({
                 _id: req.params.userId,
             });
-            user.appointments = await user.appointments.filter(
+            user.appointments = user.appointments.filter(
                 (treatment) =>
                     treatment._id._id.toString() !== req.params.treatmentId
             );

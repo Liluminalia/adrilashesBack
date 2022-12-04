@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { Types } from 'mongoose';
-import { dataBaseConnect } from '../data.base.connect.js';
 import { CustomError, HTTPError } from '../interfaces/error.js';
 import { ExtraRequest } from '../middlewares/interceptor.js';
 import { TreatmentRepository } from '../repository/treatment.repository.js';
@@ -16,7 +15,6 @@ describe('Given UserController', () => {
 
         const userId = new Types.ObjectId();
         const treatmentId = new Types.ObjectId();
-        const discount = 50;
 
         repository.post = jest.fn().mockResolvedValue({
             id: userId,
@@ -181,9 +179,6 @@ describe('Given UserController', () => {
         const repository = UserRepository.getInstance();
         const treatmentRepo = TreatmentRepository.getInstance();
         const userController = new UserController(repository, treatmentRepo);
-        const userId = new Types.ObjectId();
-        const treatmentId = new Types.ObjectId();
-        const discount = 50;
         const req: Partial<Request> = {};
         const res: Partial<Response> = {
             json: jest.fn(),
