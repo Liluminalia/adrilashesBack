@@ -2,7 +2,7 @@ import { CustomError } from '../interfaces/error.js';
 import { NextFunction, Request, Response } from 'express';
 import debugCreator from 'debug';
 
-const debug = debugCreator('W8:middleware:errors');
+const debug = debugCreator('W6:middleware:errors');
 
 export const errorManager = (
     error: CustomError,
