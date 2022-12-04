@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { dataBaseConnect } from '../data.base.connect.js';
+import { TreatmentRepository } from './treatment.repository.js';
 import { UserRepository } from './user.repository.js';
 
 describe('Given UserRepository', () => {
@@ -16,6 +17,7 @@ describe('Given UserRepository', () => {
         },
     ];
     const repository = UserRepository.getInstance();
+    TreatmentRepository.getInstance();
     let testIds: Array<string>;
     beforeAll(async () => {
         await dataBaseConnect();
@@ -72,11 +74,8 @@ describe('Given UserRepository', () => {
             expect(result.email).toBe('timon@gmail.com');
         });
         test('and receive an invalid id then should return an error', async () => {
-            const updatedUser = {
-                email: 'timon@gmail.com',
-            };
             expect(async () => {
-                await repository.patch('63872f2dd6ffab67d9815644', updatedUser);
+                await repository.patch(testIds[3], mockData[1]);
             }).rejects.toThrowError();
         });
     });

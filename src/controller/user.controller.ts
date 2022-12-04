@@ -112,7 +112,6 @@ export class UserController {
             const user = await this.repository.find({
                 _id: req.params.userId,
             });
-
             const appointment = await user.appointments.find(
                 (appointment) =>
                     appointment._id._id.toString() === req.params.treatmentId
@@ -121,6 +120,8 @@ export class UserController {
                 throw new Error('Not found id');
             }
             appointment.discount = +req.params.discount;
+            const finalPrice = appointment._id.price - appointment.discount;
+            appointment._id.price = finalPrice;
             this.repository.patch(user.id, { appointments: user.appointments });
             res.json({ user });
         } catch (error) {

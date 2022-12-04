@@ -80,14 +80,8 @@ describe('Given TreatmentRepository', () => {
                 expect(result.price).toEqual(9);
             });
             test('Then if id is bad formate should throw an error', async () => {
-                const updatedTreatment = {
-                    title: 'tomas',
-                    img: 'dgerer',
-                    description: 'ujuiuiui',
-                    price: 9,
-                };
                 expect(async () => {
-                    await repository.patch(testIds[3], updatedTreatment);
+                    await repository.patch(testIds[3], mockData[1]);
                 }).rejects.toThrowError();
             });
         });

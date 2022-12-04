@@ -5,6 +5,7 @@ import { ProtoTreatmentI, TreatmentI } from '../entities/treatment.js';
 import { CustomError, HTTPError } from '../interfaces/error.js';
 import { TreatmentController } from './treatment.controller.js';
 import { Types } from 'mongoose';
+import { ExtraRequest } from '../middlewares/interceptor.js';
 jest.mock('../services/auth');
 describe('Given TreatmentController', () => {
     describe('When we instantiate it', () => {
@@ -42,10 +43,6 @@ describe('Given TreatmentController', () => {
             price: 6,
             time: 68,
         };
-        repository.get = jest.fn().mockResolvedValue(mockData[0]);
-        repository.patch = jest.fn().mockResolvedValue(mockData[0]);
-        repository.post = jest.fn().mockResolvedValue(mockTreatment);
-        repository.delete = jest.fn().mockResolvedValue(mockData[1]);
 
         const req: Partial<Request> = {};
         const res: Partial<Response> = {
@@ -63,7 +60,8 @@ describe('Given TreatmentController', () => {
             expect(res.json).toHaveBeenCalled();
         });
 
-        test.only('Then get should have been called', async () => {
+        test('Then get should have been called', async () => {
+            repository.get = jest.fn().mockResolvedValue(mockData[0]);
             req.params = { id: '638bb6c1aacbf2a5689ee24d' };
             await treatmentController.get(
                 req as Request,
@@ -74,15 +72,19 @@ describe('Given TreatmentController', () => {
         });
 
         test('Then post should have been called', async () => {
+            repository.post = jest.fn().mockResolvedValue(mockData[0]);
+            req.body = { price: 350 };
+            (req as ExtraRequest).payload = { id: '638bb6c1aacbf2a5689ee24d' };
             await treatmentController.post(
                 req as Request,
                 res as Response,
                 next
             );
-            expect(res.json).toHaveBeenCalledWith({ treatments: mockData });
+            expect(res.json).toHaveBeenCalled();
         });
 
         test('Then patch should have been called', async () => {
+            repository.patch = jest.fn().mockResolvedValue(mockData[0]);
             await treatmentController.patch(
                 req as Request,
                 res as Response,
@@ -91,6 +93,7 @@ describe('Given TreatmentController', () => {
             expect(res.json).toHaveBeenCalledWith({ treatments: mockData });
         });
         test('Then delete should have been called', async () => {
+            repository.delete = jest.fn().mockResolvedValue(mockData[1]);
             await treatmentController.delete(
                 req as Request,
                 res as Response,
@@ -112,11 +115,6 @@ describe('Given TreatmentController', () => {
             repository,
             userRepository
         );
-        repository.getAll = jest.fn().mockRejectedValue(HTTPError);
-        repository.get = jest.fn().mockRejectedValue(HTTPError);
-        repository.post = jest.fn().mockRejectedValue(HTTPError);
-        repository.patch = jest.fn().mockRejectedValue(HTTPError);
-        repository.delete = jest.fn().mockRejectedValue(3);
 
         const req: Partial<Request> = {};
         const res: Partial<Response> = {
@@ -124,6 +122,7 @@ describe('Given TreatmentController', () => {
         };
         const next: NextFunction = jest.fn();
         test('Then if something went wrong getAll should throw an error', async () => {
+            repository.getAll = jest.fn().mockRejectedValue(HTTPError);
             await treatmentController.getAll(
                 req as Request,
                 res as Response,
@@ -132,6 +131,7 @@ describe('Given TreatmentController', () => {
             expect(error).toBeInstanceOf(HTTPError);
         });
         test('Then if something went wrong get should throw an error', async () => {
+            repository.get = jest.fn().mockRejectedValue(HTTPError);
             await treatmentController.get(
                 req as Request,
                 res as Response,
@@ -140,6 +140,7 @@ describe('Given TreatmentController', () => {
             expect(error).toBeInstanceOf(HTTPError);
         });
         test('Then if something went wrong post should throw an error', async () => {
+            repository.post = jest.fn().mockRejectedValue(HTTPError);
             await treatmentController.post(
                 req as Request,
                 res as Response,
@@ -148,6 +149,7 @@ describe('Given TreatmentController', () => {
             expect(error).toBeInstanceOf(HTTPError);
         });
         test('Then if something went wrong patch should throw an error', async () => {
+            repository.patch = jest.fn().mockRejectedValue(HTTPError);
             await treatmentController.patch(
                 req as Request,
                 res as Response,
@@ -156,12 +158,25 @@ describe('Given TreatmentController', () => {
             expect(error).toBeInstanceOf(HTTPError);
         });
         test('Then if something went wrong delete should throw an error', async () => {
+            repository.delete = jest.fn().mockRejectedValue(3);
             await treatmentController.delete(
                 req as Request,
                 res as Response,
                 next
             );
             expect(error).toBeInstanceOf(HTTPError);
+        });
+        test('Then if there is no id in payload, post should throw an error', async () => {
+            repository.post = jest.fn().mockResolvedValue(Error);
+            req.body = { price: 350 };
+            (req as ExtraRequest).payload = { id: '' };
+            const error = new Error('Not found id');
+            await treatmentController.post(
+                req as Request,
+                res as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
         });
     });
 });
