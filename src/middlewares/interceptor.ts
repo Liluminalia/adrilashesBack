@@ -30,7 +30,7 @@ export const logged = (
         );
     }
 };
-export const Authentication = async (
+export const authentication = async (
     req: ExtraRequest,
     res: Response,
     next: NextFunction
@@ -53,7 +53,7 @@ export const Authentication = async (
         next(error);
     }
 };
-export const Admin = async (
+export const admin = async (
     req: ExtraRequest,
     res: Response,
     next: NextFunction
@@ -65,16 +65,12 @@ export const Admin = async (
             throw new Error('invalid payload');
         }
         const user = await userRepo.get(req.payload.id);
-
         if (user.role !== 'admin') {
-            next(
-                new HTTPError(
-                    403,
-                    'Forbidden',
-                    'usuario o contraseña incorrectos'
-                )
+            throw new HTTPError(
+                403,
+                'Forbidden',
+                'usuario o contraseña incorrectos'
             );
-            return;
         }
         next();
     } catch (error) {

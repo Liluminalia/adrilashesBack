@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { UserController } from '../controller/user.controller.js';
-import { Admin, Authentication, logged } from '../middlewares/interceptor.js';
+import { admin, authentication, logged } from '../middlewares/interceptor.js';
 import { TreatmentRepository } from '../repository/treatment.repository.js';
 import { UserRepository } from '../repository/user.repository.js';
 
@@ -14,34 +14,34 @@ userRouter.post('/login', controller.login.bind(controller));
 userRouter.patch(
     '/appointments/add/:treatmentId',
     logged,
-    Authentication,
+    authentication,
     controller.addUserTreatment.bind(controller)
 );
 userRouter.patch(
     '/appointments/delete/:treatmentId/:userId',
     logged,
-    Authentication,
-    Admin,
+    authentication,
+    admin,
     controller.deleteUserAppointment.bind(controller)
 );
 userRouter.patch(
     '/appointments/discount/:treatmentId/:userId/:discount',
     logged,
-    Authentication,
-    Admin,
+    authentication,
+    admin,
     controller.discountUserAppointment.bind(controller)
 );
 userRouter.get(
     '/',
     logged,
-    Authentication,
-    Admin,
+    authentication,
+    admin,
     controller.getAll.bind(controller)
 );
 userRouter.get(
     '/:userId',
     logged,
-    Authentication,
-    Admin,
+    authentication,
+    admin,
     controller.getOne.bind(controller)
 );
