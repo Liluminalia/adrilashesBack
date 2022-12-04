@@ -3,6 +3,8 @@ import { UserRepository } from '../repository/user.repository';
 import { admin, authentication, ExtraRequest, logged } from './interceptor';
 
 describe('Given the interceptor', () => {
+    const res: Partial<Response> = {};
+    const next: NextFunction = jest.fn();
     describe('given logged function', () => {
         describe('when authorization is ok ', () => {
             test('then should pass to the next function', () => {
@@ -13,8 +15,6 @@ describe('Given the interceptor', () => {
                             'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzODcyZjJkZDZmZmFiMDRkOTgxNTM0NCIsIm5hbWUiOiJhZHJpYW5hU2FsbGVzIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjcwMDAxOTUxfQ.9v54DWN5tAjxjrzb-leNzQSPEL9t-jceAzX5h88-z1s'
                         ),
                 };
-                const res: Partial<Response> = {};
-                const next: NextFunction = jest.fn();
 
                 logged(req as ExtraRequest, res as Response, next);
                 expect(next).toHaveBeenCalled();
@@ -32,8 +32,6 @@ describe('Given the interceptor', () => {
                 const req: Partial<Request> = {
                     get: jest.fn().mockReturnValueOnce(false),
                 };
-                const res: Partial<Response> = {};
-                const next: NextFunction = jest.fn();
 
                 logged(req as Request, res as Response, next);
                 expect(next).toHaveBeenCalled();
@@ -42,8 +40,6 @@ describe('Given the interceptor', () => {
                 const req: Partial<Request> = {
                     get: jest.fn().mockReturnValueOnce('Bearer token'),
                 };
-                const res: Partial<Response> = {};
-                const next: NextFunction = jest.fn();
 
                 logged(req as Request, res as Response, next);
                 expect(next).toHaveBeenCalled();
@@ -64,8 +60,6 @@ describe('Given the interceptor', () => {
                 userRepository.get = jest
                     .fn()
                     .mockResolvedValue({ id: '63872f2dd6ffab04d9815344' });
-                const res: Partial<Response> = {};
-                const next: NextFunction = jest.fn();
 
                 await authentication(
                     req as ExtraRequest,
@@ -88,8 +82,6 @@ describe('Given the interceptor', () => {
                 userRepository.get = jest
                     .fn()
                     .mockResolvedValue({ id: '63872f2dd6ffab5559815344' });
-                const res: Partial<Response> = {};
-                const next: NextFunction = jest.fn();
 
                 await authentication(
                     req as ExtraRequest,
@@ -104,8 +96,7 @@ describe('Given the interceptor', () => {
                 const req: Partial<ExtraRequest> = {
                     payload: undefined,
                 };
-                const res: Partial<Response> = {};
-                const next: NextFunction = jest.fn();
+
                 const error = new Error('usuario o contraseña incorrectos');
                 authentication(req as ExtraRequest, res as Response, next);
                 expect(error).toBeInstanceOf(Error);
@@ -124,8 +115,7 @@ describe('Given the interceptor', () => {
                 const req: Partial<ExtraRequest> = {
                     payload: undefined,
                 };
-                const res: Partial<Response> = {};
-                const next: NextFunction = jest.fn();
+
                 const error = new Error('usuario o contraseña incorrectos');
                 admin(req as ExtraRequest, res as Response, next);
                 expect(error).toBeInstanceOf(Error);
@@ -145,8 +135,6 @@ describe('Given the interceptor', () => {
                         role: 'admin',
                     },
                 };
-                const res: Partial<Response> = {};
-                const next: NextFunction = jest.fn();
 
                 admin(req as ExtraRequest, res as Response, next);
                 expect(user.role && req.payload!.role).toBe('admin');
@@ -166,8 +154,7 @@ describe('Given the interceptor', () => {
                         role: 'user',
                     },
                 };
-                const res: Partial<Response> = {};
-                const next: NextFunction = jest.fn();
+
                 const error = new Error('usuario o contraseña incorrectos');
                 admin(req as ExtraRequest, res as Response, next);
                 expect(error).toBeInstanceOf(Error);
