@@ -5,6 +5,7 @@ const debug = debugCreator('FP:middleware:cors');
 
 export const setCors = (req: Request, res: Response, next: NextFunction) => {
     const origin = req.header('Origin') || '*';
+
     res.setHeader('Access-Control-Allow-Origin', origin);
 
     next();
