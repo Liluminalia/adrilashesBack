@@ -4,7 +4,6 @@ import { UserRepository } from '../repository/user.repository.js';
 import { TreatmentI } from '../entities/treatment.js';
 import { CustomError, HTTPError } from '../interfaces/error.js';
 import { TreatmentController } from './treatment.controller.js';
-import { Types } from 'mongoose';
 import { ExtraRequest } from '../middlewares/interceptor.js';
 jest.mock('../services/auth');
 describe('Given TreatmentController', () => {
