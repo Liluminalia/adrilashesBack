@@ -3,7 +3,7 @@ import { UserRepository } from '../repository/user.repository';
 import { admin, authentication, ExtraRequest, logged } from './interceptor';
 describe('given logged function', () => {
     describe('when authorization is ok ', () => {
-        test('then should have been called', () => {
+        test('then should pass to the next function', () => {
             const req: Partial<ExtraRequest> = {
                 get: jest
                     .fn()
@@ -25,7 +25,7 @@ describe('given logged function', () => {
             });
         });
     });
-    describe('when authorization is not ok ', () => {
+    describe('when the authorization is not ok ', () => {
         test('then if the authString is empty, it should return an error', () => {
             const req: Partial<Request> = {
                 get: jest.fn().mockReturnValueOnce(false),
@@ -51,7 +51,7 @@ describe('given logged function', () => {
 describe('Given authentication function', () => {
     describe('When the payload.id is equal to userId', () => {
         const userRepository = UserRepository.getInstance();
-        test('then it should call next function', async () => {
+        test('then it should call function next', async () => {
             const req: Partial<ExtraRequest> = {
                 payload: {
                     name: 'adrianaSalles',
@@ -69,9 +69,9 @@ describe('Given authentication function', () => {
             expect(next).toHaveBeenCalled();
         });
     });
-    describe('When the payload.id is different to userId', () => {
+    describe('When payload.id is different that userId', () => {
         const userRepository = UserRepository.getInstance();
-        test('then it should call next function and throw an error', async () => {
+        test('then should call next function and throw an error', async () => {
             const req: Partial<ExtraRequest> = {
                 payload: {
                     name: 'adrianaSalles',
@@ -90,7 +90,7 @@ describe('Given authentication function', () => {
         });
     });
     describe('When the payload is not ok', () => {
-        test('Then it should throw an error', () => {
+        test('then it will throw an error', () => {
             const req: Partial<ExtraRequest> = {
                 payload: undefined,
             };
@@ -104,7 +104,7 @@ describe('Given authentication function', () => {
 });
 describe('Given admin function', () => {
     const userRepository = UserRepository.getInstance();
-    describe('When the payload is not ok', () => {
+    describe('When payload is not ok', () => {
         test('Then it should throw an error', () => {
             const user = {
                 id: '63872f2dd6ffab04d9815344',
@@ -143,7 +143,7 @@ describe('Given admin function', () => {
         });
     });
     describe('When the role is not admin', () => {
-        test('Then it should throw an error', () => {
+        test('Then its going to throw error', () => {
             const user = {
                 id: '63872f2dd6ffab04d9815344',
                 role: 'user',
