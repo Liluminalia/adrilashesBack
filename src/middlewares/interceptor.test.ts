@@ -3,6 +3,7 @@ import { UserRepository } from '../repository/user.repository';
 import { admin, authentication, ExtraRequest, logged } from './interceptor';
 
 describe('Given the interceptor', () => {
+    const userRepository = UserRepository.getInstance();
     const res: Partial<Response> = {};
     const next: NextFunction = jest.fn();
     describe('given logged function', () => {
@@ -48,7 +49,6 @@ describe('Given the interceptor', () => {
     });
     describe('Given authentication function', () => {
         describe('When the payload.id is equal to userId', () => {
-            const userRepository = UserRepository.getInstance();
             test('then it should call function next', async () => {
                 const req: Partial<ExtraRequest> = {
                     payload: {
@@ -70,7 +70,6 @@ describe('Given the interceptor', () => {
             });
         });
         describe('When payload.id is different that userId', () => {
-            const userRepository = UserRepository.getInstance();
             test('then should call next function and throw an error', async () => {
                 const req: Partial<ExtraRequest> = {
                     payload: {
@@ -104,14 +103,13 @@ describe('Given the interceptor', () => {
         });
     });
     describe('Given admin function', () => {
-        const userRepository = UserRepository.getInstance();
-        describe('When payload is not ok', () => {
-            test('Then it should throw an error', () => {
-                const user = {
-                    id: '63872f2dd6ffab04d9815344',
-                    role: 'admin',
-                };
-                userRepository.get = jest.fn().mockResolvedValue(user);
+        describe('When role is admin', () => {
+            const user = {
+                id: '63872f2dd6ffab04d9815344',
+                role: 'admin',
+            };
+            userRepository.get = jest.fn().mockResolvedValue(user);
+            test('Then if payload is not ok it should throw an error', () => {
                 const req: Partial<ExtraRequest> = {
                     payload: undefined,
                 };
@@ -120,14 +118,7 @@ describe('Given the interceptor', () => {
                 admin(req as ExtraRequest, res as Response, next);
                 expect(error).toBeInstanceOf(Error);
             });
-        });
-        describe('When role is admin', () => {
             test('then should have been called', () => {
-                const user = {
-                    id: '63872f2dd6ffab04d9815344',
-                    role: 'admin',
-                };
-                userRepository.get = jest.fn().mockResolvedValue(user);
                 const req: Partial<ExtraRequest> = {
                     payload: {
                         name: 'adrianaSalles',
@@ -135,7 +126,6 @@ describe('Given the interceptor', () => {
                         role: 'admin',
                     },
                 };
-
                 admin(req as ExtraRequest, res as Response, next);
                 expect(user.role && req.payload!.role).toBe('admin');
             });
