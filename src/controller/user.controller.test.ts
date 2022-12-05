@@ -92,6 +92,9 @@ describe('Given UserController', () => {
             expect(res.json).toHaveBeenCalled();
         });
         test('Then getOne should have been called', async () => {
+            req.params = {
+                userId: userId.toString(),
+            };
             await userController.getOne(req as Request, res as Response, next);
 
             expect(res.json).toHaveBeenCalled();

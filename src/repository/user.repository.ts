@@ -54,10 +54,8 @@ export class UserRepository implements BasicRepo<UserI>, ExtraRepo<UserI> {
         const result = await this.#Model
             .findOne(search)
             .populate('appointments._id');
-        if (!result) {
-            throw new Error('not found id');
-        }
-        return result;
+
+        return result as UserI;
     }
 
     getUserModel() {

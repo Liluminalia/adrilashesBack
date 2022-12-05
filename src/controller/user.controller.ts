@@ -44,7 +44,7 @@ export class UserController {
                 name: user.name,
                 role: user.role,
             });
-            res.json({ token });
+            res.status(201).json({ token });
         } catch (error) {
             next(this.#createHttpError(error as Error));
         }
@@ -64,7 +64,7 @@ export class UserController {
     }
     async getOne(req: Request, res: Response, next: NextFunction) {
         try {
-            const users = await this.repository.get(req.params.id);
+            const users = await this.repository.get(req.params.userId);
             res.json({ users });
         } catch (error) {
             const httpError = new HTTPError(
@@ -90,7 +90,7 @@ export class UserController {
             );
             user.appointments.push(treatment as unknown as Appointment);
             this.repository.patch(user.id, { appointments: user.appointments });
-            res.json({ user });
+            res.status(202).json({ user });
         } catch (error) {
             const httpError = new HTTPError(
                 503,
@@ -125,7 +125,7 @@ export class UserController {
                 appointment.discount;
             (appointment._id as unknown as TreatmentI).price = finalPrice;
             this.repository.patch(user.id, { appointments: user.appointments });
-            res.json({ user });
+            res.status(202).json({ user });
         } catch (error) {
             const httpError = new HTTPError(
                 503,
@@ -152,7 +152,7 @@ export class UserController {
                 appointments: user.appointments,
             });
 
-            res.json({ user });
+            res.status(202).json({ user });
         } catch (error) {
             const httpError = new HTTPError(
                 503,
