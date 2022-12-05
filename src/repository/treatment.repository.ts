@@ -43,10 +43,8 @@ export class TreatmentRepository implements Repo<TreatmentI> {
         return result;
     }
     async delete(id: id): Promise<{ id: id }> {
-        const result = await this.#Model.findByIdAndDelete(id);
-        if (result === null) {
-            throw new Error('Not found id');
-        }
+        await this.#Model.findByIdAndDelete(id);
+
         return { id: id };
     }
     async post(data: ProtoTreatmentI): Promise<TreatmentI> {

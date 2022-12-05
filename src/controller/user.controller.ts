@@ -120,9 +120,10 @@ export class UserController {
                 throw new Error('Not found id');
             }
             appointment.discount = +req.params.discount;
-            // codigo ccomentado para poder hacer pull, me funciona bien pero chilla
-            // const finalPrice = appointment._id.price - appointment.discount;
-            // appointment._id.price = finalPrice;
+            const finalPrice =
+                (appointment._id as unknown as TreatmentI).price -
+                appointment.discount;
+            (appointment._id as unknown as TreatmentI).price = finalPrice;
             this.repository.patch(user.id, { appointments: user.appointments });
             res.json({ user });
         } catch (error) {
@@ -163,10 +164,6 @@ export class UserController {
     }
 
     #createHttpError(error: Error) {
-        if (error.message === 'Not found id') {
-            const httpError = new HTTPError(404, 'Not Found id', error.message);
-            return httpError;
-        }
         const httpError = new HTTPError(
             503,
             'Service unavailable',

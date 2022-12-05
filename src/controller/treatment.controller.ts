@@ -50,6 +50,7 @@ export class TreatmentController {
                 'Service unavailable',
                 (error as Error).message
             );
+
             next(httpError);
         }
     }
@@ -74,10 +75,6 @@ export class TreatmentController {
         }
     }
     #createHttpError(error: Error) {
-        if (error.message === 'Not found id') {
-            const httpError = new HTTPError(404, 'Not Found', error.message);
-            return httpError;
-        }
         const httpError = new HTTPError(
             503,
             'Service unavailable',

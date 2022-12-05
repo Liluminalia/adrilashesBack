@@ -81,12 +81,12 @@ describe('Given UserRepository', () => {
     });
     describe('when find is called ', () => {
         test('Then should return a user', async () => {
-            const result = await repository.find({ name: 'sebastian' });
+            const result = await repository.find(testIds[1]);
             expect(result.name).toEqual(mockData[1].name);
         });
         test('and receive an invalid id then should return an error', async () => {
             expect(async () => {
-                await repository.find({ key: '' });
+                await repository.find('');
             }).rejects.toThrow();
         });
     });

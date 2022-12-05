@@ -13,7 +13,6 @@ export const logged = (
     next: NextFunction
 ) => {
     const authString = req.get('Authorization');
-
     if (!authString || !authString?.startsWith('Bearer')) {
         next(
             new HTTPError(403, 'Forbidden', 'usuario o contraseña incorrecto')
@@ -39,6 +38,7 @@ export const authentication = async (
 
     try {
         const user = await userRepo.get((req.payload as JwtPayload).id);
+
         if (req.payload && user.id.toString() !== req.payload.id) {
             next(
                 new HTTPError(
@@ -65,6 +65,7 @@ export const admin = async (
             throw new Error('invalid payload');
         }
         const user = await userRepo.get(req.payload.id);
+
         if (user.role !== 'admin') {
             throw new HTTPError(
                 403,

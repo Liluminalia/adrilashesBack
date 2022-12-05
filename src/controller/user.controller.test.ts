@@ -60,7 +60,7 @@ describe('Given UserController', () => {
             res = {};
             res.status = jest.fn().mockReturnValue(res);
             next = jest.fn();
-            res.json = jest.fn();
+            res.json = jest.fn().mockReturnValue(res);
         });
 
         test('Then register should have been called', async () => {
