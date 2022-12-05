@@ -50,9 +50,9 @@ export class UserRepository implements BasicRepo<UserI>, ExtraRepo<UserI> {
         }
         return result;
     }
-    async find(id: id): Promise<UserI> {
+    async find(search: any): Promise<UserI> {
         const result = await this.#Model
-            .findById(id)
+            .findOne(search)
             .populate('appointments._id');
         if (!result) {
             throw new Error('not found id');

@@ -11,7 +11,6 @@ const setCollection = async () => {
         {
             name: 'adri',
             email: 'd',
-            password: '1234',
             phone: 'string',
             role: 'admin',
             isVip: true,
@@ -19,7 +18,6 @@ const setCollection = async () => {
         {
             name: 'marcos',
             email: 'stridfgdng',
-            password: '4321',
             phone: 'string',
             role: 'admin',
             isVip: true,
