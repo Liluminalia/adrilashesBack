@@ -10,7 +10,7 @@
         "build": "tsc",
         "build:watch": "tsc --watch",
         "test": "cross-env NODE_ENV=test jest --watchAll --coverage",
-        "test:prod": "cross-env NODE_ENV=test jest --coverage",
+        "test:prod": "cross-env NODE_ENV=test jest --coverage --runInBand",
         "start:build": "run-p build:watch start:dev"
     },
     "keywords": [],
