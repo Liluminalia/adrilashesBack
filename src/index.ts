@@ -4,7 +4,7 @@ import debugCreator from 'debug';
 import { CustomError } from './interfaces/error.js';
 import { dataBaseConnect } from './data.base.connect.js';
 
-const debug = debugCreator('http');
+const debug = debugCreator('FP:src:index');
 const port = process.env.PORT || 3300;
 const server = http.createServer(app);
 server.on('listening', () => {

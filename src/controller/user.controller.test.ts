@@ -78,13 +78,22 @@ describe('Given UserController', () => {
             });
         });
         test('Then login should have been called', async () => {
+            const mockUser = {
+                id: userId,
+                name: 'Ignacio',
+                role: 'admin',
+                appointments: [treatmentId],
+            };
             (passwordComparer as jest.Mock).mockResolvedValue(true);
             (createToken as jest.Mock).mockReturnValue('token');
             req.body = { password: 'patata' };
 
             await userController.login(req as Request, res as Response, next);
 
-            expect(res.json).toHaveBeenCalledWith({ token: 'token' });
+            expect(res.json).toHaveBeenCalledWith({
+                token: 'token',
+                user: mockUser,
+            });
         });
         test('Then getAll should have been called', async () => {
             await userController.getAll(req as Request, res as Response, next);
@@ -104,7 +113,7 @@ describe('Given UserController', () => {
                 id: '6388eeb8b065a23947e964ff',
                 name: 'uñas',
             });
-            await userController.addUserTreatment(
+            await userController.addUserAppointment(
                 req as ExtraRequest,
                 res as Response,
                 next
@@ -260,7 +269,7 @@ describe('Given UserController', () => {
         });
         test('Then addUserTreatment should throw an error', async () => {
             repository.find = jest.fn().mockRejectedValue(HTTPError);
-            await userController.addUserTreatment(
+            await userController.addUserAppointment(
                 req as ExtraRequest,
                 res as Response,
                 next

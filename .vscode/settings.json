@@ -19,5 +19,27 @@
         "titleBar.inactiveBackground": "#6baae899",
         "titleBar.inactiveForeground": "#15202b99"
     },
-    "peacock.color": "6BAAE8"
+    "peacock.color": "6BAAE8",
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "googletest.failed",
+                "settings": {
+                    "foreground": "#f00"
+                }
+            },
+            {
+                "scope": "googletest.passed",
+                "settings": {
+                    "foreground": "#0f0"
+                }
+            },
+            {
+                "scope": "googletest.run",
+                "settings": {
+                    "foreground": "#0f0"
+                }
+            }
+        ]
+    }
 }
