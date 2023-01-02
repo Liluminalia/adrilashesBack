@@ -16,7 +16,7 @@ server.on('listening', () => {
     } else {
         bind =
             addr.address === '::'
-                ? `http://localhost:${addr?.port}`
+                ? `https://adrilashes.onrender.com`
                 : `port ${addr?.port}`;
     }
     debug(`Listening on ${bind}`);
