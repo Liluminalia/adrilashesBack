@@ -4,7 +4,7 @@ import debugCreator from 'debug';
 import { CustomError } from './interfaces/error.js';
 import { dataBaseConnect } from './data.base.connect.js';
 
-const debug = debugCreator('http');
+const debug = debugCreator('FP:src:index');
 const port = process.env.PORT || 3300;
 const server = http.createServer(app);
 server.on('listening', () => {
@@ -16,7 +16,7 @@ server.on('listening', () => {
     } else {
         bind =
             addr.address === '::'
-                ? `http://localhost:${addr?.port}`
+                ? `https://adrilashes.onrender.com`
                 : `port ${addr?.port}`;
     }
     debug(`Listening on ${bind}`);

@@ -44,7 +44,7 @@ export class UserController {
                 name: user.name,
                 role: user.role,
             });
-            res.status(201).json({ token });
+            res.status(201).json({ token, user });
         } catch (error) {
             next(this.#createHttpError(error as Error));
         }
@@ -75,7 +75,7 @@ export class UserController {
             next(httpError);
         }
     }
-    async addUserTreatment(
+    async addUserAppointment(
         req: ExtraRequest,
         res: Response,
         next: NextFunction

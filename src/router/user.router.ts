@@ -15,7 +15,7 @@ userRouter.patch(
     '/appointments/add/:treatmentId',
     logged,
     authentication,
-    controller.addUserTreatment.bind(controller)
+    controller.addUserAppointment.bind(controller)
 );
 userRouter.patch(
     '/appointments/delete/:treatmentId/:userId',
